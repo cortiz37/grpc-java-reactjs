@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sensor";
+
+package com.sensor;
+
+import "google/protobuf/empty.proto";
+
+service SensorService {
+  rpc getAll (google.protobuf.Empty) returns (stream Sensor) {}
+}
+
+enum SensorType {
+  DIGITAL = 0;
+  PULSE = 1;
+}
+
+message Sensor {
+  string id = 1;
+  string name = 2;
+  SensorType type = 3;
+}
