@@ -1,0 +1,23 @@
+version: "3"
+networks:
+  app-real-time:
+    driver: bridge
+services:
+  app:
+    build: app
+    ports:
+      - "3000:3000"
+    environment:
+      - API_BASE_URL=http://server:8090
+    networks:
+      - app-real-time
+  server:
+    build: server
+    ports:
+      - "8085:8085"
+    networks:
+      - app-real-time
+  proxy:
+    build: proxy
+    ports:
+      - "8090:8090"
