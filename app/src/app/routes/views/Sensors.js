@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Card, Col, Empty, Row} from 'antd';
 import {getAll} from "../../../service/SensorsService";
-import {MonitorOutlined} from "@ant-design/icons";
+import {InfoCircleOutlined, MonitorOutlined} from "@ant-design/icons";
 import {Link} from "react-router-dom";
 
 class Sensors extends Component {
@@ -30,7 +30,13 @@ class Sensors extends Component {
                         <Card key={sensor.getId()} title={sensor.getName()}>
                             <Link key={sensor.getId()} to={"/data/" + sensor.getId()}>
                                 <Button key={sensor.getId()} block type="primary" className="big-button">
-                                    <MonitorOutlined/>
+                                    <InfoCircleOutlined/> Current data
+                                </Button>
+                            </Link>
+                            <p />
+                            <Link key={sensor.getId()} to={"/stream/" + sensor.getId()}>
+                                <Button key={sensor.getId()} block type="default" className="big-button">
+                                    <MonitorOutlined/> Monitor
                                 </Button>
                             </Link>
                         </Card>

@@ -1,34 +1,46 @@
 import React, {Component} from 'react';
 import {Card, Progress} from 'antd';
-import {getCurrentData} from "../../../service/SensorsService";
+import {streamData} from "../../../service/SensorsService";
 
-class SensorData extends Component {
+class SensorStream extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false
+            isLoading: false,
+            end: false,
+            interval: 2
         }
     }
 
     componentDidMount() {
-        getCurrentData(this.props.sensorId, (data) => {
-            this.setState({
-                sensorData: data
-            });
-        });
+        streamData(
+            this.props.sensorId,
+            this.state.interval,
+            (data) => {
+                this.setState({
+                    sensorData: data
+                });
+            },
+            () => {
+                this.setState({
+                    sensorData: undefined,
+                    end: true
+                });
+            }
+        );
     }
 
     render() {
         return <div>
             <div className="site-card-border-less-wrapper">
-                <Card title="Current data" bordered={false} style={{width: "50%"}}>
+                <Card title={"Monitor (update interval: " + this.state.interval + "s)"} bordered={false} style={{width: "50%"}}>
                     <div style={{margin: "15px"}}>
                         {
                             this.state.sensorData ?
                                 <div>
                                     <Progress type="circle" percent={this.state.sensorData.value}/>
 
-                                    <h3 style={{ marginTop: "20px" }}>
+                                    <h3 style={{marginTop: "20px"}}>
                                         Date: {new Date(this.state.sensorData.timestamp).toLocaleTimeString("en-US")}
                                     </h3>
                                 </div>
@@ -42,4 +54,4 @@ class SensorData extends Component {
     }
 }
 
-export default SensorData;
+export default SensorStream;

@@ -8,6 +8,7 @@ import AppHeader from "./AppHeader";
 import AppMenu from "./AppMenu";
 import SensorsRoute from "./routes/SensorsRoute";
 import SensorDataRoute from "./routes/SensorDataRoute";
+import SensorStreamRoute from "./routes/SensorStreamRoute";
 
 const {Content} = Layout;
 
@@ -34,7 +35,12 @@ class App extends Component {
                         <Switch>
                             <Route exact path="/" render={(props) => <MainRoute {...this.state} />}/>
                             <Route path="/sensors" render={(props) => <SensorsRoute {...this.state} />}/>
-                            <Route path="/data/:sensorId" render={(props) => <SensorDataRoute sensorId={props.match.params.sensorId} {...this.state} />}/>
+                            <Route path="/data/:sensorId" render={(props) => <SensorDataRoute
+                                sensorId={props.match.params.sensorId} {...this.state} />}
+                            />
+                            <Route path="/stream/:sensorId" render={(props) => <SensorStreamRoute
+                                sensorId={props.match.params.sensorId} {...this.state} />}
+                            />
                         </Switch>
                     </div>
                 </Content>

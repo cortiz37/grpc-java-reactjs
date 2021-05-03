@@ -4,6 +4,7 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
 import com.sensor.Sensor;
 import com.sensor.SensorData;
+import com.sensor.SensorRead;
 import com.sensor.SensorServiceGrpc;
 import com.sensor.repository.SensorRepository;
 import io.grpc.stub.StreamObserver;
@@ -27,6 +28,22 @@ public class SensorServiceImpl extends SensorServiceGrpc.SensorServiceImplBase {
         if (sensorRepository.isSensorPresent(request.getValue())) {
             SensorData sensorData = sensorRepository.getSensorData(request.getValue());
             responseObserver.onNext(sensorData);
+        }
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void streamData(SensorRead request, StreamObserver<SensorData> responseObserver) {
+        if (sensorRepository.isSensorPresent(request.getId())) {
+            while (true) {
+                SensorData sensorData = sensorRepository.getSensorData(request.getId());
+                responseObserver.onNext(sensorData);
+                try {
+                    Thread.sleep(request.getInterval());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         responseObserver.onCompleted();
     }

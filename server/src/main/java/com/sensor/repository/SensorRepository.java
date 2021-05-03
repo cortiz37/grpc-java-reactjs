@@ -29,7 +29,7 @@ public class SensorRepository {
     public SensorData getSensorData(String sensorId) {
         Random random = new Random();
         return SensorData.newBuilder()
-            .setValue(random.nextInt())
+            .setValue(random.nextInt(101))
             .setTimestamp(System.currentTimeMillis())
             .build();
     }

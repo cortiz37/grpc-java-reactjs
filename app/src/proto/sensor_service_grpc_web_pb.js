@@ -158,7 +158,7 @@ proto.com.sensor.SensorServicePromiseClient.prototype.getAll =
  */
 const methodDescriptor_SensorService_getData = new grpc.web.MethodDescriptor(
   '/com.sensor.SensorService/getData',
-  grpc.web.MethodType.SERVER_STREAMING,
+  grpc.web.MethodType.UNARY,
   google_protobuf_wrappers_pb.StringValue,
   proto.com.sensor.SensorData,
   /**
@@ -192,15 +192,37 @@ const methodInfo_SensorService_getData = new grpc.web.AbstractClientBase.MethodI
 
 
 /**
- * @param {!proto.google.protobuf.StringValue} request The request proto
+ * @param {!proto.google.protobuf.StringValue} request The
+ *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!grpc.web.ClientReadableStream<!proto.com.sensor.SensorData>}
+ * @param {function(?grpc.web.Error, ?proto.com.sensor.SensorData)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.com.sensor.SensorData>|undefined}
  *     The XHR Node Readable Stream
  */
 proto.com.sensor.SensorServiceClient.prototype.getData =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/com.sensor.SensorService/getData',
+      request,
+      metadata || {},
+      methodDescriptor_SensorService_getData,
+      callback);
+};
+
+
+/**
+ * @param {!proto.google.protobuf.StringValue} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.com.sensor.SensorData>}
+ *     Promise that resolves to the response
+ */
+proto.com.sensor.SensorServicePromiseClient.prototype.getData =
     function(request, metadata) {
-  return this.client_.serverStreaming(this.hostname_ +
+  return this.client_.unaryCall(this.hostname_ +
       '/com.sensor.SensorService/getData',
       request,
       metadata || {},
@@ -209,19 +231,77 @@ proto.com.sensor.SensorServiceClient.prototype.getData =
 
 
 /**
- * @param {!proto.google.protobuf.StringValue} request The request proto
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.com.sensor.SensorRead,
+ *   !proto.com.sensor.SensorData>}
+ */
+const methodDescriptor_SensorService_streamData = new grpc.web.MethodDescriptor(
+  '/com.sensor.SensorService/streamData',
+  grpc.web.MethodType.SERVER_STREAMING,
+  proto.com.sensor.SensorRead,
+  proto.com.sensor.SensorData,
+  /**
+   * @param {!proto.com.sensor.SensorRead} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.com.sensor.SensorData.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.com.sensor.SensorRead,
+ *   !proto.com.sensor.SensorData>}
+ */
+const methodInfo_SensorService_streamData = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.com.sensor.SensorData,
+  /**
+   * @param {!proto.com.sensor.SensorRead} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.com.sensor.SensorData.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.com.sensor.SensorRead} request The request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
  * @return {!grpc.web.ClientReadableStream<!proto.com.sensor.SensorData>}
  *     The XHR Node Readable Stream
  */
-proto.com.sensor.SensorServicePromiseClient.prototype.getData =
+proto.com.sensor.SensorServiceClient.prototype.streamData =
     function(request, metadata) {
   return this.client_.serverStreaming(this.hostname_ +
-      '/com.sensor.SensorService/getData',
+      '/com.sensor.SensorService/streamData',
       request,
       metadata || {},
-      methodDescriptor_SensorService_getData);
+      methodDescriptor_SensorService_streamData);
+};
+
+
+/**
+ * @param {!proto.com.sensor.SensorRead} request The request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!grpc.web.ClientReadableStream<!proto.com.sensor.SensorData>}
+ *     The XHR Node Readable Stream
+ */
+proto.com.sensor.SensorServicePromiseClient.prototype.streamData =
+    function(request, metadata) {
+  return this.client_.serverStreaming(this.hostname_ +
+      '/com.sensor.SensorService/streamData',
+      request,
+      metadata || {},
+      methodDescriptor_SensorService_streamData);
 };
 
 
