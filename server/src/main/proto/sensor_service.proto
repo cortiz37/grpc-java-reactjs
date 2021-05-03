@@ -10,7 +10,7 @@ import "google/protobuf/wrappers.proto";
 
 service SensorService {
   rpc getAll (google.protobuf.Empty) returns (stream Sensor) {}
-  rpc streamById (google.protobuf.StringValue) returns (stream SensorData) {}
+  rpc getData (google.protobuf.StringValue) returns (stream SensorData) {}
 }
 
 enum SensorType {

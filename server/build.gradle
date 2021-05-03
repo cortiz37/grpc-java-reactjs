@@ -56,3 +56,7 @@ applicationDistribution.into("bin") {
     from(server)
     fileMode = 0755
 }
+
+jar {
+    archiveName "server.jar"
+}

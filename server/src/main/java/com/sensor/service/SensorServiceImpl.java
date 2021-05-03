@@ -23,17 +23,10 @@ public class SensorServiceImpl extends SensorServiceGrpc.SensorServiceImplBase {
     }
 
     @Override
-    public void streamById(StringValue request, StreamObserver<SensorData> responseObserver) {
+    public void getData(StringValue request, StreamObserver<SensorData> responseObserver) {
         if (sensorRepository.isSensorPresent(request.getValue())) {
-            while (true) {
-                SensorData sensorData = sensorRepository.getSensorData(request.getValue());
-                responseObserver.onNext(sensorData);
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+            SensorData sensorData = sensorRepository.getSensorData(request.getValue());
+            responseObserver.onNext(sensorData);
         }
         responseObserver.onCompleted();
     }
