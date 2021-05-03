@@ -19,7 +19,7 @@
 
 --------
 
- #### Making changes
+#### Making changes
  
 To update the proto files:
 
@@ -34,3 +34,13 @@ Client:
  - copy the proto file into `src/app/proto/` directory
  - `protoc src/proto/sensor_service.proto --js_out=import_style=commonjs:. --grpc-web_out=import_style=commonjs,mode=grpcwebtext:.`
  - update the client implementation
+
+--------
+
+#### Tools
+ 
+##### protoc:
+
+- (mac): 
+    - `brew install protobuf`
+    - `brew install protoc-gen-grpc-web`
