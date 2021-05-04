@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-import {Card, Progress} from 'antd';
+import {Card, Col, List, Progress, Row} from 'antd';
 import {streamData} from "../../../service/SensorsService";
 
 class SensorStream extends Component {
+    history = [];
+
     constructor(props) {
         super(props);
         this.state = {
@@ -20,6 +22,10 @@ class SensorStream extends Component {
                 this.setState({
                     sensorData: data
                 });
+                this.history.unshift(data);
+                if(this.history.length > 5) {
+                    this.history.pop();
+                }
             },
             () => {
                 this.setState({
@@ -31,19 +37,40 @@ class SensorStream extends Component {
     }
 
     render() {
+        let count = 1;
+
         return <div>
             <div className="site-card-border-less-wrapper">
-                <Card title={"Monitor (update interval: " + this.state.interval + "s)"} bordered={false} style={{width: "50%"}}>
+                <Card title={"Monitor (update interval: " + this.state.interval + "s)"} bordered={false}
+                      style={{width: "100%"}}>
                     <div style={{margin: "15px"}}>
                         {
                             this.state.sensorData ?
-                                <div>
-                                    <Progress type="circle" percent={this.state.sensorData.value}/>
+                                <Row gutter={[16, 16]}>
+                                    <Col lg={8} md={24}>
+                                        <Progress type="circle" percent={this.state.sensorData.value}/>
 
-                                    <h3 style={{marginTop: "20px"}}>
-                                        Date: {new Date(this.state.sensorData.timestamp).toLocaleTimeString("en-US")}
-                                    </h3>
-                                </div>
+                                        <h3 style={{marginTop: "20px"}}>
+                                            Date: {new Date(this.state.sensorData.timestamp).toLocaleTimeString("en-US")}
+                                        </h3>
+                                    </Col>
+                                    <Col md={16} sm={24}>
+                                        <List
+                                            size="small"
+                                            header="Local history (latest 5)"
+                                            bordered
+                                            dataSource={this.history}
+                                            renderItem={item =>
+                                                <List.Item>
+                                                    <b># {count ++}</b>
+                                                    <b>{item.value} %</b>
+                                                    <div style={{width: "200px"}}><Progress type="line" percent={item.value} showInfo={false} /></div>
+                                                    <span>{new Date(item.timestamp).toLocaleTimeString("en-US")}</span>
+                                                </List.Item>
+                                            }
+                                        />
+                                    </Col>
+                                </Row>
                                 :
                                 <div>No data</div>
                         }
