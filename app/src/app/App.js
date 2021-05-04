@@ -19,7 +19,7 @@ class App extends Component {
         this.state = {
             isLoading: false
         };
-        window.app = this;
+        window.grpcCancellableStreams = [];
     }
 
     render() {

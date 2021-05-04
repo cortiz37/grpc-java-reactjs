@@ -15,7 +15,7 @@ class SensorStream extends Component {
     }
 
     componentDidMount() {
-        streamData(
+        const stream = streamData(
             this.props.sensorId,
             this.state.interval,
             (data) => {
@@ -23,7 +23,7 @@ class SensorStream extends Component {
                     sensorData: data
                 });
                 this.history.unshift(data);
-                if(this.history.length > 5) {
+                if (this.history.length > 5) {
                     this.history.pop();
                 }
             },
@@ -34,6 +34,20 @@ class SensorStream extends Component {
                 });
             }
         );
+
+        this.cancelPreviousStreams(stream);
+    }
+
+    componentWillUnmount() {
+        this.cancelPreviousStreams();
+    }
+
+    cancelPreviousStreams(newStream) {
+        window.grpcCancellableStreams.forEach(stream => stream.cancel());
+        window.grpcCancellableStreams = [];
+        if(newStream) {
+            window.grpcCancellableStreams.push(newStream);
+        }
     }
 
     render() {
@@ -62,9 +76,11 @@ class SensorStream extends Component {
                                             dataSource={this.history}
                                             renderItem={item =>
                                                 <List.Item>
-                                                    <b># {count ++}</b>
+                                                    <b># {count++}</b>
                                                     <b>{item.value} %</b>
-                                                    <div style={{width: "200px"}}><Progress type="line" percent={item.value} showInfo={false} /></div>
+                                                    <div style={{width: "200px"}}><Progress type="line"
+                                                                                            percent={item.value}
+                                                                                            showInfo={false}/></div>
                                                     <span>{new Date(item.timestamp).toLocaleTimeString("en-US")}</span>
                                                 </List.Item>
                                             }

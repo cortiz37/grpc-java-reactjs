@@ -7,6 +7,7 @@ import com.sensor.SensorData;
 import com.sensor.SensorRead;
 import com.sensor.SensorServiceGrpc;
 import com.sensor.repository.SensorRepository;
+import io.grpc.Context;
 import io.grpc.stub.StreamObserver;
 
 public class SensorServiceImpl extends SensorServiceGrpc.SensorServiceImplBase {
@@ -35,14 +36,23 @@ public class SensorServiceImpl extends SensorServiceGrpc.SensorServiceImplBase {
     @Override
     public void streamData(SensorRead request, StreamObserver<SensorData> responseObserver) {
         if (sensorRepository.isSensorPresent(request.getId())) {
-            while (true) {
-                SensorData sensorData = sensorRepository.getSensorData(request.getId());
-                responseObserver.onNext(sensorData);
-                try {
-                    Thread.sleep(request.getInterval());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            Context.CancellableContext withCancellation = Context.current().withCancellation();
+            try {
+                withCancellation.run(() -> {
+                    Context current = Context.current();
+                    while (!current.isCancelled()) {
+                        SensorData sensorData = sensorRepository.getSensorData(request.getId());
+                        responseObserver.onNext(sensorData);
+                        try {
+                            System.out.println(" --> sending value");
+                            Thread.sleep(request.getInterval());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            } finally {
+                withCancellation.cancel(null);
             }
         }
         responseObserver.onCompleted();

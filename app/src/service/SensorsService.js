@@ -36,4 +36,5 @@ export function streamData(id, interval, callbackOnData, callbackOnEnd) {
     data.on('end', function () {
         callbackOnEnd();
     });
+    return data;
 }
