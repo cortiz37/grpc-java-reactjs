@@ -44,7 +44,7 @@ public class SensorServiceImpl extends SensorServiceGrpc.SensorServiceImplBase {
                         SensorData sensorData = sensorRepository.getSensorData(request.getId());
                         responseObserver.onNext(sensorData);
                         try {
-                            System.out.println(" --> sending value");
+                            System.out.println(" -> sending value '" + sensorData.getValue() + "' [" + Thread.currentThread().getName() + "]");
                             Thread.sleep(request.getInterval());
                         } catch (InterruptedException e) {
                             e.printStackTrace();

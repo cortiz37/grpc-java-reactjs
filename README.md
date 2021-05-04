@@ -37,6 +37,25 @@ Client:
 
 --------
 
+#### Monitoring
+ 
+Streams send data to active clients:
+
+`docker-compose logs -f server`
+
+```
+server_1  |  -> sending value '68' [grpc-default-executor-0]
+server_1  |  -> sending value '19' [grpc-default-executor-0]
+server_1  |  -> sending value '24' [grpc-default-executor-0]
+server_1  |  -> sending value '70' [grpc-default-executor-0]
+server_1  |  -> sending value '97' [grpc-default-executor-0]
+...
+```
+
+Logs will stop when exiting the streaming data UI or refreshing the page.
+
+--------
+
 #### Tools
  
 ##### protoc:
